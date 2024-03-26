@@ -36,7 +36,7 @@ export const deleteContact = async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "Not found");
     }
-    res.json(result);
+    res.json({ message: "Delete success" });
   } catch (error) {
     next(error);
   }
@@ -56,6 +56,27 @@ export const createContact = async (req, res, next) => {
 };
 
 export const updateContact = async (req, res, next) => {
+  try {
+    const { error, value } = updateContactSchema.validate(req.body);
+
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { id } = req.params;
+    const result = await contactsService.updateContactById(id, req.body);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    if (Object.keys(value).length === 0) {
+      throw HttpError(400, "Body must have at least one field");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateContactFavorite = async (req, res, next) => {
   try {
     const { error, value } = updateContactSchema.validate(req.body);
 
