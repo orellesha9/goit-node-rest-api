@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { handleSaveError, setUpdateSettings } from "./hooks.js";
 import { emailRegepxp } from "../constants/user-constants.js";
+import { token } from "morgan";
 const userSchema = new Schema(
   {
     username: {
@@ -17,7 +18,11 @@ const userSchema = new Schema(
       type: String,
       require: true,
     },
+    token: {
+      type: String,
+    },
   },
+ 
   { versionKey: false, timestamps: true }
 );
 
