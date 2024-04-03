@@ -22,8 +22,8 @@ const singnup = async (req, res) => {
   });
 
   res.status(201).json({
-    username: newUser.username,
     email: newUser.email,
+    subscription: newUser.subscription
   });
 };
 
@@ -47,13 +47,16 @@ const singin = async (req, res) => {
 
   await authServices.updateUser({ _id: id }, { token });
 
-  res.json({ token });
+  res.json({ token , user: {email: user.email, subscription: user.subscription} });
 };
 
 const getCurrent = async (req, res) => {
-  const { username, email } = req.user;
+  const { email,subscription } = req.user;
 
-  res.json({ username, email });
+
+
+
+  res.json({ email, subscription });
 };
 
 const singout = async (req, res) => {

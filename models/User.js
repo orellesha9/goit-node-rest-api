@@ -4,25 +4,26 @@ import { emailRegepxp } from "../constants/user-constants.js";
 import { token } from "morgan";
 const userSchema = new Schema(
   {
-    username: {
+    password: {
       type: String,
-      require: true,
+      required: [true, "Password is required"],
     },
     email: {
       type: String,
-      match: emailRegepxp,
+      required: [true, "Email is required"],
       unique: true,
-      require: true,
     },
-    password: {
+    subscription: {
       type: String,
-      require: true,
+      enum: ["starter", "pro", "business"],
+      default: "starter",
     },
     token: {
       type: String,
+      default: null,
     },
   },
- 
+
   { versionKey: false, timestamps: true }
 );
 
