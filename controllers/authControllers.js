@@ -22,8 +22,10 @@ const singnup = async (req, res) => {
   });
 
   res.status(201).json({
-    email: newUser.email,
-    subscription: newUser.subscription
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
   });
 };
 
@@ -47,14 +49,14 @@ const singin = async (req, res) => {
 
   await authServices.updateUser({ _id: id }, { token });
 
-  res.json({ token , user: {email: user.email, subscription: user.subscription} });
+  res.json({
+    token,
+    user: { email: user.email, subscription: user.subscription },
+  });
 };
 
 const getCurrent = async (req, res) => {
-  const { email,subscription } = req.user;
-
-
-
+  const { email, subscription } = req.user;
 
   res.json({ email, subscription });
 };
@@ -63,7 +65,7 @@ const singout = async (req, res) => {
   const { _id } = req.user;
   await authServices.updateUser({ _id }, { token: "" });
 
-  res.json({ message: "Singout success" });
+  res.json(204, "");
 };
 
 export default {
