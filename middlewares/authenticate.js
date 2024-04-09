@@ -17,9 +17,9 @@ const authenticate = async (req, res, next) => {
   }
   try {
     const { id } = jwt.verify(token, JWT_SECRET);
-    console.log(id);
+    // console.log(id);
     const user = await findUser({ _id: id });
-    console.log(user);
+    // console.log(user);
     if (!user) {
       return next(HttpError(401, "User not found"));
     }
@@ -29,7 +29,7 @@ const authenticate = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     next(HttpError(401, error.message));
   }
 };
