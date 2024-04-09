@@ -1,4 +1,5 @@
 import express from "express";
+import upload from "../middlewares/upload.js";
 import {
   getAllContacts,
   getOneContact,
@@ -21,7 +22,10 @@ contactsRouter.get("/:id", isValidId, getOneContact);
 
 contactsRouter.delete("/:id", isValidId, deleteContact);
 
-contactsRouter.post("/", createContact);
+
+//upload.fields([{name: "poster", maxCount: 1}])
+// upload.array("poster", 8)
+contactsRouter.post("/",upload.single("poster"), createContact);
 
 contactsRouter.patch("/:id/favorite", isNotFoundId, updateContactFavorite);
 

@@ -1,4 +1,5 @@
 import express from "express";
+import upload from "../middlewares/upload.js";
 import authControllers from "../controllers/authControllers.js";
 import { userSigninSchema, userSignupSchema } from "../schemas/usersSchemas.js";
 import validateBody from "../decorators/validateBody.js";
@@ -16,6 +17,13 @@ authRouter.post(
   validateBody(userSigninSchema),
   authControllers.singin
 );
+
+authRouter.patch(
+  "/avatars",authenticate,
+  upload.single("avatar"),
+  authControllers.updateAvatar
+);
+
 
 authRouter.get("/current", authenticate, authControllers.getCurrent);
 
