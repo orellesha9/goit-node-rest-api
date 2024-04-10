@@ -40,7 +40,6 @@ const singnup = async (req, res) => {
 const singin = async (req, res) => {
   const { email, password } = req.body;
   const user = await authServices.findUser({ email });
-
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
   }
@@ -51,12 +50,10 @@ const singin = async (req, res) => {
   }
 
   const { _id: id } = user;
-
+  const { JWT_SECRET } = process.env;
   const payload = { id };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
-
   await authServices.updateUser({ _id: id }, { token });
-
   res.json({
     token,
     user: { email: user.email, subscription: user.subscription },
@@ -80,6 +77,7 @@ const updateAvatar = async (req, res) => {
   try {
     const { _id } = req.user;
     const { path: oldPath, filename } = req.file;
+
     const newPath = path.join(posterPath, filename);
 
     await fs.rename(oldPath, newPath);
@@ -88,7 +86,6 @@ const updateAvatar = async (req, res) => {
     const image = await Jimp.read(newPath);
     await image.resize(250, 250).writeAsync(newPath);
 
-
     await authServices.updateUser({ _id }, { avatarURL: avatar });
 
     res.status(200).json({
@@ -96,7 +93,7 @@ const updateAvatar = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Помилка сервера" });
+    res.status(400).json({ error: "File not found" });
   }
 };
 
