@@ -74,27 +74,25 @@ const singout = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-  try {
-    const { _id } = req.user;
-    const { path: oldPath, filename } = req.file;
-
-    const newPath = path.join(posterPath, filename);
-
-    await fs.rename(oldPath, newPath);
-    const avatar = path.join("avatars", filename);
-
-    const image = await Jimp.read(newPath);
-    await image.resize(250, 250).writeAsync(newPath);
-
-    await authServices.updateUser({ _id }, { avatarURL: avatar });
-
-    res.status(200).json({
-      avatarURL: avatar,
-    });
-  } catch (err) {
-    console.error(err);
+  if (!req.file) {
     res.status(400).json({ error: "File not found" });
   }
+  const { _id } = req.user;
+  const { path: oldPath, filename } = req.file;
+
+  const newPath = path.join(posterPath, filename);
+
+  await fs.rename(oldPath, newPath);
+  const avatar = path.join("avatars", filename);
+
+  const image = await Jimp.read(newPath);
+  await image.resize(250, 250).writeAsync(newPath);
+
+  await authServices.updateUser({ _id }, { avatarURL: avatar });
+
+  res.status(200).json({
+    avatarURL: avatar,
+  });
 };
 
 export default {
