@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { handleSaveError, setUpdateSettings } from "./hooks.js";
 
+
 const contactSchema = new Schema(
   {
     name: {
@@ -16,6 +17,10 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    poster: {
+      type: String,
+      required: true,
     },
     owner: {
       type: Schema.Types.ObjectId,
