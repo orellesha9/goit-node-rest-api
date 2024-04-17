@@ -58,13 +58,9 @@ const verify = async (req, res) => {
   if (!user) {
     throw HttpError(404, "User not found");
   }
-  if (user.verify) {
-    throw HttpError(400, "Verification has already been passed");
-  }
   await authServices.updateUser(
     { _id: user._id },
-    { verify: true },
-    { verificationToken: "" }
+    { verify: true, verificationToken: "" }
   );
 
   res.json({
