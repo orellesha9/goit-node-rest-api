@@ -1,7 +1,7 @@
 import express from "express";
 import upload from "../middlewares/upload.js";
 import authControllers from "../controllers/authControllers.js";
-import { userSigninSchema, userSignupSchema } from "../schemas/usersSchemas.js";
+import { userSigninSchema, userSignupSchema, userEmailSchema } from "../schemas/usersSchemas.js";
 import validateBody from "../decorators/validateBody.js";
 import authenticate from "../middlewares/authenticate.js";
 const authRouter = express.Router();
@@ -17,6 +17,10 @@ authRouter.post(
   validateBody(userSigninSchema),
   authControllers.singin
 );
+
+authRouter.get("/verify/:verificationToken", authControllers.verify);
+
+authRouter.post("/verify", validateBody(userEmailSchema), authControllers.resendVerify)
 
 authRouter.patch(
   "/avatars",authenticate,
